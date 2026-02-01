@@ -17,7 +17,7 @@
       }
     ],
     "CatalogueMFE": [
-    {
+      {
         "url": "http://localhost:2002/remoteEntry.js",
         "metadata": {
           "integrity": "sha256-initial",
@@ -28,9 +28,7 @@
           "alias": "CatalogueMFE",
           "exposed": "MFE",
           "route": "/catalogue",
-          "routes": [
-            "/catalogue/:productId"
-          ]
+          "routes": ["/catalogue/:productId"]
         }
       }
     ],
@@ -78,4 +76,4 @@
       }
     ]
   }
-} 
+}

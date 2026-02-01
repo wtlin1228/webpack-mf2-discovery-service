@@ -1,26 +1,34 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getInstance } from "@module-federation/runtime-tools";
 
-import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
 import Header from "./Header";
 import Loading from "./Loading";
 import NotificationModal from "./components/NotificationModal";
 import emitter from "./services/eventEmitter";
 import "./index.css";
 
+import fmJson from "../../frontend-discovery.json";
+
 const System = ({ request, mfInstance }) => {
   const navigate = useNavigate();
-  
+
   if (!request) {
     return <h2>No system specified</h2>;
   }
-  
+
   if (!mfInstance) {
     return <div>Module Federation instance not initialized</div>;
   }
-  
+
   const MFE = React.lazy(() =>
-    mfInstance.loadRemote(request)
+    mfInstance
+      .loadRemote(request)
       .then((module) => {
         if (!module) {
           throw new Error(`Module is undefined for request: ${request}`);
@@ -32,15 +40,12 @@ const System = ({ request, mfInstance }) => {
       .catch((error) => {
         console.error(`Failed to load remote: ${request}`, error);
         throw error;
-      })
+      }),
   );
 
   return (
     <React.Suspense fallback={<div>Loading...</div>}>
-      <MFE 
-        emitter={emitter} 
-        onNavigate={(path) => navigate(path)}
-      />
+      <MFE emitter={emitter} onNavigate={(path) => navigate(path)} />
     </React.Suspense>
   );
 };
@@ -89,8 +94,12 @@ function App() {
       const instance = getInstance();
       setMfInstance(instance);
 
-      const response = await fetch("http://localhost:8080/frontend-discovery.json");
-      const data = await response.json();
+      // const response = await fetch(
+      //   "http://localhost:8080/frontend-discovery.json",
+      // );
+      // const data = await response.json();
+
+      const data = fmJson;
 
       const remotes = [];
       const routeConfigs = [];

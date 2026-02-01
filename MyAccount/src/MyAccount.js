@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback, Suspense } from "react";
 import { getInstance } from "@module-federation/runtime-tools";
 
+import fmJson from "../../frontend-discovery.json";
+
 // Get the instance once at module level
 const mfInstance = getInstance();
 
@@ -37,8 +39,10 @@ function MyAccount({ emitter }) {
 
   const loadMfes = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:8080/frontend-discovery.json");
-      const data = await response.json();
+      // const response = await fetch("http://localhost:8080/frontend-discovery.json");
+      // const data = await response.json();
+
+      const data = fmJson;
 
       const userMfes = [
         data.microFrontends.UserDetailsMFE[0],
@@ -50,11 +54,11 @@ function MyAccount({ emitter }) {
           name: mfe.extras.name,
           alias: mfe.extras.alias,
           entry: mfe.url,
-        }))
+        })),
       );
 
       const requests = userMfes.map(
-        (mfe) => `${mfe.extras.alias}/${mfe.extras.exposed}`
+        (mfe) => `${mfe.extras.alias}/${mfe.extras.exposed}`,
       );
       setMfeRequests(requests);
       setIsLoading(false);
